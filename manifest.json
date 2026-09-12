@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "PKG-015",
+  "slug": "telemetry-reports",
+  "name": "sovereign-telemetry-reports",
+  "domain": "Automated Document Compilation",
+  "version": "1.0.0",
+  "status": "PRODUCTION_READY",
+  "entrypoint": "src/core.py",
+  "cli_command": "sovereign-telemetry-reports",
+  "microservice_port": 8793,
+  "n8n_webhook_path": "telemetry-reports-trigger",
+  "n8n_workflow": "n8n/workflow.json",
+  "test_suite": "tests/test_solution.py",
+  "author": "Russell Alan Powers",
+  "license": "MIT"
+}
