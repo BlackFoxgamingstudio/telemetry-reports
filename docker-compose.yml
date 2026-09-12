@@ -1,0 +1,39 @@
+version: "3.9"
+# Sovereign Telemetry Reports — docker-compose
+# Usage: docker-compose up --build
+
+services:
+  telemetry-reports:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: sovereign-telemetry-reports:latest
+    container_name: sovereign-telemetry-reports
+    restart: unless-stopped
+    ports:
+      - "8793:8793"
+    environment:
+      SBB_REPORT_TEMPLATE_DIR: ${SBB_REPORT_TEMPLATE_DIR}
+      SBB_OUTPUT_FORMAT: ${SBB_OUTPUT_FORMAT}
+      SBB_SMTP_HOST: ${SBB_SMTP_HOST}
+      SBB_CHART_THEME: ${SBB_CHART_THEME}
+      SBB_API_KEY: ${SBB_API_KEY:-change-me}
+      SBB_N8N_EVENT_BUS_URL: ${SBB_N8N_EVENT_BUS_URL:-http://host.docker.internal:5678/webhook/event-bus}
+      SERVICE_PORT: 8793
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ./.data:/app/.data:rw
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8793/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - sbb-platform
+
+networks:
+  sbb-platform:
+    external: true
+    name: sbb-platform-network
